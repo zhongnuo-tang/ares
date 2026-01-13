@@ -1,0 +1,3 @@
+config ENTRY_ARES
+	bool "\"Ares, World!\" example"
+	depends on EXAMPLES_ARES

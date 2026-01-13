@@ -1,0 +1,14 @@
+#
+# For a description of the syntax of this configuration file,
+# see kconfig-language at https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt
+#
+
+config EXAMPLES_ARES
+	bool "\"Ares, World!\" example"
+	default n
+	---help---
+		Enable the \"Ares, World!\" example
+
+config USER_ENTRYPOINT
+	string
+	default "aello_main" if ENTRY_ARES
