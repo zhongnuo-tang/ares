@@ -5,6 +5,10 @@
 extern "C" {
 #endif
 
+/*============================================================
+ *  Public Function Prototypes
+ *============================================================*/
+
 /**
  * @brief Fetch current date and time from an HTTP server
  *

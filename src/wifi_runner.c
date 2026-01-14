@@ -1,3 +1,6 @@
+#include <tinyara/config.h>
+#include <stdio.h>
+
 #include "wifi_runner.h"
 #include "http_client.h"
 
@@ -36,7 +39,7 @@ static void connect_wifi(void)
     return;
 }
 
-void wifi_runnable(void)
+int wifi_runnable(int argc, char *argv[])
 {
     init_wifi();
     sleep(5);

@@ -1,13 +1,40 @@
+#ifndef TASK_MANAGER_H
+#define TASK_MANAGER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <tinyara/config.h>
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sched.h>
+#include <errno.h>
+
 #include "task_define.h"
-#include "sound_player.h"
+#include "sound_runner.h"
 #include "lcd_runner.h"
 #include "wifi_runner.h"
+#include "fs_runner.h"
+#include "uart_runner.h"
 
-static const task_t task_table[] = {
-    { "sound", SCHED_PRIORITY_DEFAULT, 65536 , task_play_sound         },
-    { "lcd"  , SCHED_PRIORITY_DEFAULT, 65536 , task_display_lcd        },
-    { "wifi" , SCHED_PRIORITY_DEFAULT, 16384, wifi_runnable            },
-};
+/*============================================================
+ *  Public Function Prototypes
+ *============================================================*/
 
-#define TASK_COUNT (sizeof(task_table) / sizeof(task_table[0]))
+/**
+ * @brief Run all defined tasks
+ *
+ * This function creates and starts all tasks defined in the task table.
+ */
 void run_tasks(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* TASK_MANAGER_H */

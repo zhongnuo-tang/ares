@@ -21,20 +21,23 @@ int http_client(void) {
     request.buflen   = REQUEST_BUFFER_SIZE;
     request.encoding = CONTENT_LENGTH;
     request.headers  = malloc(sizeof(struct http_keyvalue_list_t));
-    if (!request.headers) {
+    if (!request.headers)
+    {
         printf("Failed to allocate headers\n");
         return -1;
     }
     http_keyvalue_list_init(request.headers);
 
-    if (http_client_response_init(&response) < 0) {
+    if (http_client_response_init(&response) < 0)
+    {
         printf("Failed to init response\n");
         free(request.headers);
         return -1;
     }
 
     ret = http_client_send_request(&request, NULL, &response);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         printf("Request failed\n");
         http_client_response_release(&response);
         free(request.headers);

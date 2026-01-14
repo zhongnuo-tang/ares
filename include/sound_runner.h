@@ -1,4 +1,23 @@
-#include <tinyara/config.h>
-#include <stdio.h>
+#ifndef SOUND_RUNNER_H
+#define SOUND_RUNNER_H
 
-void task_play_sound(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*============================================================
+ *  Public Function Prototypes
+ *============================================================*/
+
+/**
+ * @brief Sound task handler
+ * This function is inteneded to be called as an RTOS task
+ * to play sound repeatedly.
+ */
+int task_play_sound(int argc, char *argv[]);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* SOUND_RUNNER_H */

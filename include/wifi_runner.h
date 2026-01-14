@@ -1,4 +1,24 @@
-#include <tinyara/config.h>
-#include <stdio.h>
+#ifndef WIFI_RUNNER_H
+#define WIFI_RUNNER_H
 
-void wifi_runnable(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+/*============================================================
+ *  Public Function Prototypes
+ *============================================================*/
+
+/**
+ * @brief WiFi task handler
+ * This function is intended to be called as an RTOS task.
+ * Connects to a WiFi network and repeatedly performs GET requests.
+ */
+int wifi_runnable(int argc, char *argv[]);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* WIFI_RUNNER_H */
