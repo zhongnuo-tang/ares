@@ -13,12 +13,13 @@ static char *fs_mnt0_argv[] = {
 };
 
 static const task_t task_table[] = {
-    { "sound"       , SCHED_PRIORITY_DEFAULT, 65536, task_play_sound , NULL                             },
-    { "lcd"         , SCHED_PRIORITY_DEFAULT, 65536, task_display_lcd, NULL                             },
-    { "wifi"        , SCHED_PRIORITY_DEFAULT, 16384, wifi_runnable   , NULL                             },
-    { "fs_mnt"      , SCHED_PRIORITY_DEFAULT, 8192 , fs_task_main    , fs_mnt_argv                      },
-    { "fs_mnt0"     , SCHED_PRIORITY_DEFAULT, 8192 , fs_task_main    , fs_mnt0_argv                     },
-    { "uart_rx"     , SCHED_PRIORITY_DEFAULT, 8192 , uart_runnable   , NULL                     },
+    { "sound"       , SCHED_PRIORITY_DEFAULT, 65536, task_play_sound             , NULL                             },
+    { "lcd"         , SCHED_PRIORITY_DEFAULT, 65536, task_display_lcd            , NULL                             },
+    { "wifi"        , SCHED_PRIORITY_DEFAULT, 16384, wifi_runnable               , NULL                             },
+    { "fs_mnt"      , SCHED_PRIORITY_DEFAULT, 8192 , fs_task_main                , fs_mnt_argv                      },
+    { "fs_mnt0"     , SCHED_PRIORITY_DEFAULT, 8192 , fs_task_main                , fs_mnt0_argv                     },
+    { "uart_rx"     , SCHED_PRIORITY_DEFAULT, 8192 , uart_runnable               , NULL                             },
+    { "power"       , SCHED_PRIORITY_DEFAULT, 8192 , task_start_power_management , NULL                             },
 };
 
 void run_tasks(void)

@@ -69,7 +69,8 @@ CSRCS =   src/sound_runner.c \
 		  src/wifi_runner.c  \
 		  src/http_client.c  \
 		  src/uart_runner.c  \
-		  src/fs_runner.c
+		  src/fs_runner.c    \
+		  src/pm_runner.c
 MAINSRC = ares_main.c
 
 AOBJS = $(ASRCS:.S=$(OBJEXT))

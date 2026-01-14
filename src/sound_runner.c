@@ -3,11 +3,13 @@
 
 #include "sound_runner.h"
 
-static void play_music(void)
+uint8_t counter = 0;
+
+static void play_music(char* path)
 {
     char *argv[] = {
         "soundplayer"               ,     // UNUSED
-        "/res/kernel/audio/test.mp3",     // contents path
+        path                        ,     // contents path
         "3"                         ,     // volume
         "48000"                     ,     // sample rate
         "1"                         ,     // stream policy
@@ -24,7 +26,15 @@ int task_play_sound(int argc, char *argv[])
 
     while (1)
     {
-        play_music();
+        if ( counter % 2 == 0 )
+        {
+            play_music("/res/kernel/audio/sleep.mp3");
+        }
+        else
+        {
+            play_music("/res/kernel/audio/test.mp3");
+        }
+        counter++;
         sleep(1);
     }
 }

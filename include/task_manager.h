@@ -21,6 +21,7 @@ extern "C" {
 #include "wifi_runner.h"
 #include "fs_runner.h"
 #include "uart_runner.h"
+#include "pm_runner.h"
 
 /*============================================================
  *  Public Function Prototypes
