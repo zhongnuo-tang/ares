@@ -17,6 +17,7 @@ typedef struct {
     int         stack_size;
     task_fn_t   run;    /* function to execute */
     char * const      arg;    /* argument to the function */
+    int         cpu_affinity;
 } task_t;
 
 #ifdef __cplusplus

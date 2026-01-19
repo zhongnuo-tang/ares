@@ -54,24 +54,25 @@
 -include $(TOPDIR)/Make.defs
 include $(APPDIR)/Make.defs
 
-# Hello, World! built-in application info
+LVGL_PATH = $(APPDIR)/examples/ares/vendor/lvgl
+include $(LVGL_PATH)/lvgl.mk
 
 APPNAME = ares
 FUNCNAME = $(APPNAME)_main
 THREADEXEC = TASH_EXECMD_ASYNC
 
-# Hello, World! Example
 CFLAGS += -I$(APPDIR)/examples/ares/include
 CXXFLAGS += -I$(APPDIR)/examples/ares/include
-ASRCS =
-CXXSRCS = src/sound_runner.cpp
-CSRCS =   src/task_manager.c \
+CXXSRCS += src/sound_runner.cpp
+CSRCS +=   src/task_manager.c \
 		  src/lcd_runner.c   \
 		  src/wifi_runner.c  \
 		  src/http_client.c  \
 		  src/uart_runner.c  \
 		  src/fs_runner.c    \
 		  src/pm_runner.c    \
+		  src/lcd_drawer.c   \
+		  src/assets/crabpower.c         \
 		  src/monitor.c
 
 

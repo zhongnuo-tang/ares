@@ -1,3 +1,6 @@
 [submodule "src/RTT"]
 	path = src/RTT
 	url = https://github.com/SEGGERMicro/RTT.git
+[submodule "vendor/lvgl"]
+	path = vendor/lvgl
+	url = https://github.com/lvgl/lvgl.git

@@ -23,6 +23,7 @@ extern "C" {
 #include "uart_runner.h"
 #include "pm_runner.h"
 #include "monitor.h"
+#include "lcd_drawer.h"
 
 /*============================================================
  *  Public Function Prototypes

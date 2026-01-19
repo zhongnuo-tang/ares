@@ -55,6 +55,6 @@ int monitor_task( int argc, char *argv[] )
                 heap.uordblks,
                 heap.arena,
                 max_memory_used );
-        sleep( 1 );
+        sleep( 3 );
     }
 }

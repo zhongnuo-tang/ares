@@ -6,6 +6,15 @@
 
 #define KB( x ) ( ( x ) * 1024 )
 #define WRITE_SIZE KB( 16 )
+#define DUMP_BUFFER( n, buf )                                \
+    do                                                       \
+    {                                                        \
+        for ( int i = 0; i < ( n ); i++ )                    \
+        {                                                    \
+            printf( "%02x ", buf[ i ] );                     \
+        }                                                    \
+        printf( "\n" );                                      \
+    } while ( 0 )
 
 static pthread_mutex_t g_mutex_fs_ready;
 
@@ -91,10 +100,6 @@ static void *task_read_fs( void *arg )
             }
             else
             {
-                for ( int i = 0; i < n; i++ )
-                {
-                    printf( "%02x ", (unsigned char)buf[ i ] );
-                }
                 printf( "Reader: Data verification failed\n" );
             }
             printf( "\n" );
@@ -103,7 +108,7 @@ static void *task_read_fs( void *arg )
         close( fd );
 
         pthread_mutex_unlock( &g_mutex_fs_ready );
-        sleep( 3 );
+        sleep( 60 );
     }
     return NULL;
 }
@@ -114,10 +119,7 @@ static uint8_t verify_buffer( uint8_t *buf, size_t len )
     {
         if ( buf[ i ] != ( i % 256 ) )
         {
-            printf( "Data mismatch at index %zu: expected %u, got %u\n",
-                    i,
-                    (unsigned char)( i % 256 ),
-                    buf[ i ] );
+            printf( "Data mismatch at index %zu: expected %u, got %u\n", i, (unsigned char)( i % 256 ), buf[ i ] );
             return -1;
         }
     }
