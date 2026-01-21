@@ -44,6 +44,15 @@ static void fs_init( void )
     pthread_mutex_lock( &g_mutex_fs_ready );
 }
 
+static void delete_file( const char *path )
+{
+    int ret = unlink( path );
+    if ( ret < 0 )
+    {
+        printf( "Failed to delete file %s\n", path );
+    }
+}
+
 static void *task_write_fs( void *arg )
 {
     char *path = (char *)arg;
@@ -110,12 +119,17 @@ static void *task_read_fs( void *arg )
                 printf( "Reader: Data verification failed\n" );
             }
             printf( "\n" );
+            delete_file( path );
+        }
+        else
+        {
+            printf( "Reader: read failed for %s\n", path );
         }
 
         close( fd );
 
         pthread_mutex_unlock( &g_mutex_fs_ready );
-        sleep( 60 );
+        sleep( 5 );
     }
     return NULL;
 }

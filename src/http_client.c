@@ -1,3 +1,5 @@
+#include "data.h"
+#include <math.h>
 #include <protocols/webclient.h>
 #include <pthread.h>
 #include <stdint.h>
@@ -11,15 +13,22 @@
 /*                           Macro Defnitions                                      */
 /* ******************************************************************************* */
 
-#define REQUEST_URL "http://example.com/"
+#define REQUEST_URL "http://192.168.31.7:5000/now/"
 #define REQUEST_BUFFER_SIZE ( 1024 * 4 )
+
+extern uint8_t is_wifi_connected;
 
 /* ******************************************************************************* */
 /*                           Public Function Defnitions                            */
 /* ******************************************************************************* */
 
-int http_client( void )
+int http_client( char* time_str )
 {
+    if ( !is_wifi_connected )
+    {
+        printf( "WiFi not connected yet, skip HTTP client\n" );
+        return -1;
+    }
     struct http_client_request_t request;
     struct http_keyvalue_list_t headers;
     struct http_client_response_t response;
@@ -43,8 +52,8 @@ int http_client( void )
         printf( "fail to send request\n" );
         goto release_out;
     }
-    printf( "Response Status: %d\n", response.status );
-    printf( "%s\n", response.entity );
+    printf( "Response Status: %d Data: %s\n", response.status, response.entity );
+    get_time_str( response.entity, time_str, 64 );
 
 release_out:
     http_client_response_release( &response );

@@ -12,6 +12,11 @@
 #define XIAOMI_AUTH "wpa2_aes"
 
 /* ******************************************************************************* */
+/*                           Public Variable Declarations                          */
+/* ******************************************************************************* */
+uint8_t is_wifi_connected;
+
+/* ******************************************************************************* */
 /*                           Private Function Declarations                         */
 /* ******************************************************************************* */
 
@@ -42,6 +47,22 @@ static void connect_wifi( void )
     return;
 }
 
+static void get_wifi_info( void )
+{
+    if ( !is_wifi_connected )
+    {
+        printf( "WiFi not connected yet, skip getting WiFi info\n" );
+        return;
+    }
+    char *argv[] = { "wm_test", "info", NULL };
+    int argc = 2;
+
+    wm_test_main( argc, argv );
+
+    return;
+}
+
+
 /* ******************************************************************************* */
 /*                           Public Function Defnitions                            */
 /* ******************************************************************************* */
@@ -51,10 +72,11 @@ int wifi_runnable( int argc, char *argv[] )
     init_wifi();
     sleep( 5 );
     connect_wifi();
+    is_wifi_connected = 1;
 
     while ( 1 )
     {
-        http_client();
+        get_wifi_info();
         sleep( 5 );
     }
 }

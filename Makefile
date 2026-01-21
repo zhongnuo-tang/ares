@@ -54,28 +54,32 @@
 -include $(TOPDIR)/Make.defs
 include $(APPDIR)/Make.defs
 
-LVGL_PATH = $(APPDIR)/examples/ares/vendor/lvgl
-include $(LVGL_PATH)/lvgl.mk
 
 APPNAME = ares
 FUNCNAME = $(APPNAME)_main
 THREADEXEC = TASH_EXECMD_ASYNC
 
-CFLAGS += -I$(APPDIR)/examples/ares/include
-CXXFLAGS += -I$(APPDIR)/examples/ares/include
-CXXSRCS += src/sound_runner.cpp
-CSRCS +=   src/task_manager.c \
-		  src/lcd_runner.c   \
-		  src/wifi_runner.c  \
-		  src/http_client.c  \
-		  src/uart_runner.c  \
-		  src/fs_runner.c    \
-		  src/pm_runner.c    \
-		  src/lcd_drawer.c   \
-		  src/assets/crabpower.c         \
-		  src/monitor.c
+VENDOR_PATH = $(APPDIR)/examples/ares/vendor
+LVGL_PATH = $(VENDOR_PATH)/lvgl
+CJSON_PATH = $(VENDOR_PATH)/cJSON
+include $(LVGL_PATH)/lvgl.mk
 
-
+CFLAGS    += -I$(APPDIR)/examples/ares/include \
+             -I$(CJSON_PATH)
+CXXFLAGS  += -I$(APPDIR)/examples/ares/include
+CXXSRCS   += src/sound_manager.cpp
+CSRCS     += src/task_manager.c \
+			 src/lcd_manager.c   \
+			 src/wifi_manager.c  \
+			 src/http_client.c  \
+			 src/uart_manager.c  \
+			 src/fs_manager.c    \
+			 src/pm_manager.c    \
+			 src/lcd_drawer.c   \
+			 src/assets/crabpower.c         \
+			 src/data_parser.c         \
+			 src/system_monitor.c
+VENDOR_SRCS += $(CJSON_PATH)/cJSON.c
 MAINSRC = ares_main.c
 
 AOBJS = $(ASRCS:.S=$(OBJEXT))

@@ -37,6 +37,7 @@ static lv_color_t *buf1 = NULL;
 LV_IMG_DECLARE( IMG_NAME );
 static int lcd_fd = -1;
 static lv_display_t *disp;
+static lv_obj_t *price_label = NULL;
 
 /* ******************************************************************************* */
 /*                           Private Function Declarations                         */
@@ -110,7 +111,7 @@ static void lv_port_disp_init( void )
         return;
     }
 
-    lv_display_set_buffers( disp, buf1, NULL, buf_pixels * sizeof( lv_color_t ), LV_DISPLAY_RENDER_MODE_FULL );
+    lv_display_set_buffers( disp, buf1, NULL, buf_pixels * sizeof( lv_color_t ), LV_DISPLAY_RENDER_MODE_DIRECT );
 
     lv_display_set_flush_cb( disp, lcd_flush_cb );
 }
@@ -127,8 +128,9 @@ static void anim_size_cb( void *var, int32_t v )
 
 static void lcd_draw( void )
 {
-    lv_obj_t *img = lv_img_create( lv_scr_act() ); // create image object
-    lv_img_set_src( img, &IMG_NAME );              // set the crab image
+    // --- Animated Image ---
+    lv_obj_t *img = lv_img_create( lv_scr_act() );
+    lv_img_set_src( img, &IMG_NAME );
     lv_obj_align( img, LV_ALIGN_LEFT_MID, 10, 0 );
 
     lv_anim_t a;
@@ -140,6 +142,11 @@ static void lcd_draw( void )
     lv_anim_set_playback_time( &a, 2000 );
     lv_anim_set_repeat_count( &a, LV_ANIM_REPEAT_INFINITE );
     lv_anim_start( &a );
+
+    // --- Static Stock Price Label ---
+    price_label = lv_label_create( lv_scr_act() );
+    lv_obj_align( price_label, LV_ALIGN_TOP_RIGHT, -10, 10 );
+    lv_obj_set_style_text_font( price_label, &lv_font_montserrat_14, 0 );
 }
 
 /* ******************************************************************************* */
@@ -152,6 +159,8 @@ int task_draw_lcd( int argc, char *argv[] )
     lv_hal_init();
     lv_port_disp_init();
     lcd_draw();
+    char* time_str = malloc( 64 * sizeof(char) );
+    uint32_t i = 0;
 
     while ( 1 )
     {
@@ -160,8 +169,17 @@ int task_draw_lcd( int argc, char *argv[] )
             lv_tick_inc( 5 );
             lv_timer_handler();
         }
+        if ( i % 100 == 0 )
+        {
+            http_client( time_str );
+            lv_label_set_text( price_label, time_str );
+        }
+        i++;
+        
         usleep( 5000 );
     }
+
+    free( time_str );
 
     return 0;
 }
