@@ -12,6 +12,7 @@ TizenRT application which includes various functional tests.
 1. Clone the [TizenRT](https://github.com/Samsung/TizenRT) repository
 2. `cd` into `apps/examples` of the cloned TizenRT repository
 3. Clone this repository into the CWD
+4. Run `git submodule update --init --recursive`
 
 ## Building the application
 
@@ -23,3 +24,8 @@ TizenRT application which includes various functional tests.
 4. Run `"3. Modify Current Configuration"`
 5. In `Application Configuration > Examples`, enable `Ares` example.
 6. Run `1. Build with Current Configuration`
+
+## Formatting
+
+Please apply the `.clang-format` before committing changes.
+You may use `CTRL+SHIFT+P > Format Document` in VSCode

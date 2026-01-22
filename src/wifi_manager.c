@@ -1,5 +1,5 @@
-#include "wifi_runner.h"
 #include "http_client.h"
+#include "wifi_runner.h"
 #include <stdio.h>
 #include <tinyara/config.h>
 
@@ -61,7 +61,6 @@ static void get_wifi_info( void )
 
     return;
 }
-
 
 /* ******************************************************************************* */
 /*                           Public Function Defnitions                            */

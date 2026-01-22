@@ -1,9 +1,7 @@
 BasedOnStyle: LLVM
 
-# Braces (Allman, but keep initializer brace on same line as '=')
 BreakBeforeBraces: Allman
 BraceWrapping:
-  AfterVariable: false
   AfterEnum: true
   AfterStruct: true
   AfterUnion: true

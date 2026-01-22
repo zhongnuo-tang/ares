@@ -22,7 +22,7 @@ extern uint8_t is_wifi_connected;
 /*                           Public Function Defnitions                            */
 /* ******************************************************************************* */
 
-int http_client( char* time_str )
+int http_client( char *time_str )
 {
     if ( !is_wifi_connected )
     {

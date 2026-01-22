@@ -60,9 +60,8 @@ class MySoundPlayer : public MediaPlayerObserverInterface,
 {
   public:
     MySoundPlayer()
-        : mNumContents( 0 ), mPlayIndex( -1 ), mHasFocus( false ),
-          mPaused( false ), mStopped( false ), mIsPlaying( false ),
-          mTrackFinished( false ), mSampleRate( DEFAULT_SAMPLERATE_TYPE ),
+        : mNumContents( 0 ), mPlayIndex( -1 ), mHasFocus( false ), mPaused( false ), mStopped( false ),
+          mIsPlaying( false ), mTrackFinished( false ), mSampleRate( DEFAULT_SAMPLERATE_TYPE ),
           mVolume( DEFAULT_VOLUME ), mLooping( false ) {};
     ~MySoundPlayer() {};
     bool init( int argc, char *argv[] );
@@ -70,12 +69,9 @@ class MySoundPlayer : public MediaPlayerObserverInterface,
     bool checkTrackFinished( void );
     void handleError( player_error_t error );
     void onPlaybackFinished( MediaPlayer &mediaPlayer ) override;
-    void onPlaybackError( MediaPlayer &mediaPlayer,
-                          player_error_t error ) override;
-    void onPauseError( MediaPlayer &mediaPlayer,
-                       player_error_t error ) override;
-    void onAsyncPrepared( MediaPlayer &mediaPlayer,
-                          player_error_t error ) override;
+    void onPlaybackError( MediaPlayer &mediaPlayer, player_error_t error ) override;
+    void onPauseError( MediaPlayer &mediaPlayer, player_error_t error ) override;
+    void onAsyncPrepared( MediaPlayer &mediaPlayer, player_error_t error ) override;
     void onFocusChange( int focusChange ) override;
 
   private:
@@ -95,17 +91,14 @@ class MySoundPlayer : public MediaPlayerObserverInterface,
     void loadContents( const char *path );
 };
 
-void MySoundPlayer::onPauseError( MediaPlayer &mediaPlayer,
-                                  player_error_t error )
+void MySoundPlayer::onPauseError( MediaPlayer &mediaPlayer, player_error_t error )
 {
     handleError( error );
 }
 
 void MySoundPlayer::onPlaybackFinished( MediaPlayer &mediaPlayer )
 {
-    printf( "onPlaybackFinished playback index : %d player : %x\n",
-            mPlayIndex,
-            &mp );
+    printf( "onPlaybackFinished playback index : %d player : %x\n", mPlayIndex, &mp );
     mPlayIndex++;
     mIsPlaying = false;
     mPaused = false;
@@ -135,8 +128,7 @@ void MySoundPlayer::onPlaybackFinished( MediaPlayer &mediaPlayer )
 }
 
 /* Error case, terminate playback */
-void MySoundPlayer::onPlaybackError( MediaPlayer &mediaPlayer,
-                                     player_error_t error )
+void MySoundPlayer::onPlaybackError( MediaPlayer &mediaPlayer, player_error_t error )
 {
     handleError( error );
 }
@@ -155,8 +147,7 @@ void MySoundPlayer::handleError( player_error_t error )
     mTrackFinished = true;
 }
 
-void MySoundPlayer::onAsyncPrepared( MediaPlayer &mediaPlayer,
-                                     player_error_t error )
+void MySoundPlayer::onAsyncPrepared( MediaPlayer &mediaPlayer, player_error_t error )
 {
     printf( "onAsyncPrepared error : %d\n", error );
     player_result_t res;
@@ -298,9 +289,7 @@ bool MySoundPlayer::init( int argc, char *argv[] )
     {
         mPlayIndex = 0;
     }
-    printf( "Show Track List!! mNumContents : %d mPlayIndex : %d\n",
-            mNumContents,
-            mPlayIndex );
+    printf( "Show Track List!! mNumContents : %d mPlayIndex : %d\n", mNumContents, mPlayIndex );
     for ( int i = 0; i != (int)mList.size(); i++ )
     {
         printf( "path : %s\n", mList.at( i ).c_str() );
@@ -319,10 +308,8 @@ bool MySoundPlayer::init( int argc, char *argv[] )
     stream_info_create( (stream_policy_t)( atoi( argv[ 4 ] ) ), &info );
     auto deleter = []( stream_info_t *ptr ) { stream_info_destroy( ptr ); };
     auto stream_info = std::shared_ptr<stream_info_t>( info, deleter );
-    mFocusRequest = FocusRequest::Builder()
-                        .setStreamInfo( stream_info )
-                        .setFocusChangeListener( shared_from_this() )
-                        .build();
+    mFocusRequest =
+        FocusRequest::Builder().setStreamInfo( stream_info ).setFocusChangeListener( shared_from_this() ).build();
     mp.setStreamInfo( stream_info );
 
     mSampleRate = atoi( argv[ 3 ] );
@@ -344,11 +331,8 @@ player_result_t MySoundPlayer::startPlayback( void )
 {
     player_result_t res = PLAYER_OK;
     string s = mList.at( mPlayIndex );
-    printf( "startPlayback... playIndex : %d path : %s\n",
-            mPlayIndex,
-            s.c_str() );
-    auto source = std::move( unique_ptr<FileInputDataSource>(
-        new FileInputDataSource( (const string)s ) ) );
+    printf( "startPlayback... playIndex : %d path : %s\n", mPlayIndex, s.c_str() );
+    auto source = std::move( unique_ptr<FileInputDataSource>( new FileInputDataSource( (const string)s ) ) );
     source->setSampleRate( mSampleRate );
     source->setChannels( DEFAULT_CHANNEL_NUM );
     source->setPcmFormat( DEFAULT_FORMAT_TYPE );
@@ -414,8 +398,7 @@ void MySoundPlayer::loadContents( const char *dirpath )
 
     while ( ( entryp = readdir( dirp ) ) != NULL )
     {
-        if ( ( strcmp( ".", entryp->d_name ) == 0 ) ||
-             ( strcmp( "..", entryp->d_name ) == 0 ) )
+        if ( ( strcmp( ".", entryp->d_name ) == 0 ) || ( strcmp( "..", entryp->d_name ) == 0 ) )
         {
             continue;
         }
@@ -504,11 +487,7 @@ extern "C"
         */
         while ( 1 )
         {
-            pid_t pid = task_create( "play_music",
-                                     SCHED_PRIORITY_DEFAULT,
-                                     16384,
-                                     play_music,
-                                     NULL );
+            pid_t pid = task_create( "play_music", SCHED_PRIORITY_DEFAULT, 16384, play_music, NULL );
             waitpid( pid, NULL, 0 );
             sleep( 3 );
         }

@@ -159,7 +159,7 @@ int task_draw_lcd( int argc, char *argv[] )
     lv_hal_init();
     lv_port_disp_init();
     lcd_draw();
-    char* time_str = malloc( 64 * sizeof(char) );
+    char *time_str = malloc( 64 * sizeof( char ) );
     uint32_t i = 0;
 
     while ( 1 )
@@ -175,7 +175,7 @@ int task_draw_lcd( int argc, char *argv[] )
             lv_label_set_text( price_label, time_str );
         }
         i++;
-        
+
         usleep( 5000 );
     }
 
