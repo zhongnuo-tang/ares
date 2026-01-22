@@ -3,12 +3,11 @@
 
 import os
 import subprocess
-import zipfile
+import tarfile
 import re
 import requests
 import argparse
 import sys
-import time
 
 # =========================
 # User configuration
@@ -29,14 +28,10 @@ def run(cmd, cwd=None):
     result = subprocess.run(cmd, shell=True, check=True, cwd=cwd)
     print(f">>> Command finished with return code {result.returncode}")
     
-def zip_directory(src_dir, zip_path):
-    print(f"\nZipping {src_dir} -> {zip_path}")
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for root, _, files in os.walk(src_dir):
-            for f in files:
-                full_path = os.path.join(root, f)
-                rel_path = os.path.relpath(full_path, src_dir)
-                zf.write(full_path, rel_path)
+def zip_directory(src_dir, tar_path):
+    print(f"Compressing {src_dir} -> {tar_path}")
+    with tarfile.open(tar_path, "w:xz") as tar:
+        tar.add(src_dir, arcname=os.path.basename(src_dir))
                 
 def get_next_build_number(repo_url, repo_name, auth):
     """
