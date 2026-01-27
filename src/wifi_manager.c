@@ -98,7 +98,6 @@ int wifi_runnable( int argc, char *argv[] )
     while ( 1 )
     {
         get_wifi_info();
-
         char *time_str = (char *)malloc( 64 );
         http_client( time_str );
 
@@ -114,6 +113,6 @@ int wifi_runnable( int argc, char *argv[] )
             free( time_str );
         }
 
-        sleep( 3 );
+        sleep( 1 );
     }
 }

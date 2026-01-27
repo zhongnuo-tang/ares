@@ -37,6 +37,7 @@ extern mqd_t time_status_mq;
 /* ******************************************************************************* */
 
 static lv_color_t *buf1 = NULL;
+static lv_color_t *buf2 = NULL;
 LV_IMG_DECLARE( IMG_NAME );
 static int lcd_fd = -1;
 static lv_display_t *disp;
@@ -70,7 +71,6 @@ static void lcd_flush_cb( lv_display_t *display, const lv_area_t *area, uint8_t 
     lcd_area.data = px_map;
 
     ioctl( lcd_fd, LCDDEVIO_PUTAREA, (unsigned long)(uintptr_t)&lcd_area );
-    usleep( 10000 );
 
     lv_display_flush_ready( display );
 }
@@ -108,13 +108,14 @@ static void lv_port_disp_init( void )
 
     size_t buf_pixels = LCD_W * LCD_H;
     buf1 = malloc( buf_pixels * sizeof( lv_color_t ) );
-    if ( !buf1 )
+    buf2 = malloc( buf_pixels * sizeof( lv_color_t ) );
+    if ( !buf1 || !buf2 )
     {
         printf( "LVGL buffer alloc failed\n" );
         return;
     }
 
-    lv_display_set_buffers( disp, buf1, NULL, buf_pixels * sizeof( lv_color_t ), LV_DISPLAY_RENDER_MODE_DIRECT );
+    lv_display_set_buffers( disp, buf1, buf2, buf_pixels * sizeof( lv_color_t ), LV_DISPLAY_RENDER_MODE_DIRECT );
 
     lv_display_set_flush_cb( disp, lcd_flush_cb );
 }
