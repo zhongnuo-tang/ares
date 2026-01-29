@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "common.h"
+#include "wifi_runner.h"
 
 /* ******************************************************************************* */
 /*                           Macro Defnitions                                      */
@@ -17,19 +18,14 @@
 #define REQUEST_URL "http://" SERVER_IP ":" HTTP_SERVER_PORT "/now/"
 #define REQUEST_BUFFER_SIZE ( 1024 * 4 )
 
-extern uint8_t is_wifi_connected;
-
 /* ******************************************************************************* */
 /*                           Public Function Defnitions                            */
 /* ******************************************************************************* */
 
 int http_client( char *time_str )
 {
-    if ( !is_wifi_connected )
-    {
-        printf( "WiFi not connected yet, skip HTTP client\n" );
-        return -1;
-    }
+    wait_for_wifi();
+
     struct http_client_request_t request;
     struct http_keyvalue_list_t headers;
     struct http_client_response_t response;

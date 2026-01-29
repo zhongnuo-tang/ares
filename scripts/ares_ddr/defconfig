@@ -367,9 +367,9 @@ CONFIG_ARCH_BOARD_HAVE_FLASH=y
 #
 CONFIG_FLASH_PARTITION=y
 CONFIG_FLASH_MINOR=0
-CONFIG_FLASH_PART_SIZE="60,40,12,400,1844,8476,4780,1844,8476,4780,2048,8,"
-CONFIG_FLASH_PART_TYPE="none,none,none,none,kernel,bin,bin,kernel,bin,bin,smartfs,bootparam,"
-CONFIG_FLASH_PART_NAME="bl1,reserved,ftl,ss,kernel,common,app1,kernel,common,app1,userfs,bootparam,"
+CONFIG_FLASH_PART_SIZE="60,40,12,400,2868,8476,4780,2868,8476,4780,8,"
+CONFIG_FLASH_PART_TYPE="none,none,none,none,kernel,bin,bin,kernel,bin,bin,bootparam,"
+CONFIG_FLASH_PART_NAME="bl1,reserved,ftl,ss,kernel,common,app1,kernel,common,app1,bootparam,"
 CONFIG_ARCH_BOARD_HAVE_SECOND_FLASH=y
 
 #
@@ -1726,7 +1726,7 @@ CONFIG_EXAMPLE_LCD_FPS_TEST=5000
 # CONFIG_EXAMPLES_MEDIASTREAMER is not set
 # CONFIG_EXAMPLES_MEM_PROTECT_TEST is not set
 # CONFIG_EXAMPLES_MEMORY_FRAGMENTATION_TEST is not set
-# CONFIG_EXAMPLES_NETTEST is not set
+CONFIG_EXAMPLES_NETTEST=y
 
 #
 # Performance

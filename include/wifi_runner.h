@@ -17,6 +17,8 @@ extern "C" {
  */
 int wifi_runnable(int argc, char *argv[]);
 
+void wait_for_wifi(void);
+
 #ifdef __cplusplus
 }
 #endif

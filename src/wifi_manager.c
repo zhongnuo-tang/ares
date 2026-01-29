@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <tinyara/config.h>
+#include <semaphore.h>
 
 /* ******************************************************************************* */
 /*                           Macro Defnitions                                      */
@@ -14,12 +15,13 @@
 #define XIAOMI_PASSWORD "1234567890"
 #define XIAOMI_AUTH "wpa2_aes"
 #define MQ_NAME "/time_status_mq"
+#define WIFI_CONNECTED_BIT 0x01
 
 /* ******************************************************************************* */
 /*                           Public Variable Declarations                          */
 /* ******************************************************************************* */
-uint8_t is_wifi_connected;
 mqd_t time_status_mq;
+static volatile uint8_t wifi_status = 0;
 
 /* ******************************************************************************* */
 /*                           Private Function Declarations                         */
@@ -27,6 +29,9 @@ mqd_t time_status_mq;
 
 static void init_wifi( void );
 static void connect_wifi( void );
+static void get_wifi_info( void );
+static int mq_init( void );
+static void wifi_set_ready(void);
 
 /* ******************************************************************************* */
 /*                           Private Function Defnitions                           */
@@ -54,11 +59,8 @@ static void connect_wifi( void )
 
 static void get_wifi_info( void )
 {
-    if ( !is_wifi_connected )
-    {
-        printf( "WiFi not connected yet, skip getting WiFi info\n" );
-        return;
-    }
+    wait_for_wifi();
+
     char *argv[] = { "wm_test", "info", NULL };
     int argc = 2;
 
@@ -79,16 +81,29 @@ static int mq_init( void )
     return 0;
 }
 
+static void wifi_set_ready(void)
+{
+  wifi_status |= WIFI_CONNECTED_BIT;
+}
+
 /* ******************************************************************************* */
 /*                           Public Function Defnitions                            */
 /* ******************************************************************************* */
+
+void wait_for_wifi(void)
+{
+  while (!(wifi_status & WIFI_CONNECTED_BIT))
+  {
+    usleep(100000);
+  }
+}
 
 int wifi_runnable( int argc, char *argv[] )
 {
     init_wifi();
     sleep( 5 );
     connect_wifi();
-    is_wifi_connected = 1;
+    wifi_set_ready();
     if ( mq_init() < 0 )
     {
         perror( "mq_init failed" );
