@@ -21,12 +21,12 @@ int ota_manager_runnable( int argc, char *argv[] )
 
     while ( 1 )
     {
+        sleep( MINUTES( 10 ) );
         printf( "\n==== OTA Manager Task Start Kernel Update Test ====\n" );
         ota_in_progress = 1;
         run_kernel_update();
         ota_in_progress = 0;
         printf( "==== OTA OK ====\n" );
-        sleep( MINUTES( 10 ) );
     }
     
     return 0;
