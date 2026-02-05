@@ -78,7 +78,9 @@ CSRCS     += src/task_manager.c \
 			 src/system_monitor.c \
 			 src/netstress_manager.c \
 			 src/ota_manager.c \
-			 src/kernel_update.c
+			 src/kernel_update.c \
+			 src/ble_manager.c \
+			 src/ble_rmc.c
 
 ifeq ($(CONFIG_LCD),y)
 	include $(LVGL_PATH)/lvgl.mk

@@ -26,11 +26,11 @@ while (1) {
     /* Drain semaphore */
     while (sem_trywait(&ota_complete_semaphore) == 0);
 
-    sleep(MINUTES(10));
     ota_in_progress = 1;
-    sleep(5); // Give some time to prepare for OTA
+    sleep(10); // Give some time to prepare for OTA
     run_kernel_update();
     ota_in_progress = 0;
+    sleep(MINUTES(5));
 
     sem_post(&ota_complete_semaphore);
 }

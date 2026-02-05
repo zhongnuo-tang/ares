@@ -5,6 +5,10 @@ config:
 flowchart LR
  USER["User"]
  USER@{ icon: "aws:res-user", pos: "b"}
+
+ subgraph SUT["BLE SUT"]
+        BLE_RMC_SUT["BLE_RMC_Server"]
+  end
  
  subgraph Server["Test Server"]
         TS["Time Service"]
@@ -28,6 +32,8 @@ flowchart LR
         UART1_RX["UART1_RX"]
         LCD_POWER_MANAGER["LCD_PWR_MGR"]
         OTN_MANAGER["OTN_MGR"]
+        BLE_MANAGER["BLE_MANAGER"]
+        BLE_RMC_Client["BLE_RMC_Client"]
         
   end
     TS --> IPLOG
@@ -49,6 +55,8 @@ flowchart LR
     UART1_RX -- Match Status --> LOGUART
     AUDIO -. sleep n seconds .-> AUDIO
     XXP_CLT -- UDP/TCP Random Data --> SOCKET_SERVER
+    BLE_MANAGER -- BLE RMC Init --> BLE_RMC_Client
+    BLE_RMC_Client -- BLE Data --> BLE_RMC_Server
 
 
     LOGUART --> USER

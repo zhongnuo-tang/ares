@@ -12,9 +12,6 @@
 /*                           Macro Defnitions                                      */
 /* ******************************************************************************* */
 
-#define XIAOMI_SSID "xiaomi_test"
-#define XIAOMI_PASSWORD "1234567890"
-#define XIAOMI_AUTH "wpa2_aes"
 #define MQ_NAME "/time_status_mq"
 #define WIFI_CONNECTED_BIT 0x01
 
@@ -25,6 +22,8 @@ mqd_t time_status_mq;
 pthread_mutex_t wifi_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t wifi_cond = PTHREAD_COND_INITIALIZER;
 int wifi_status = 0;
+extern char ssid[];
+extern char password[];
 
 /* ******************************************************************************* */
 /*                           Private Function Declarations                         */
@@ -52,7 +51,8 @@ static void init_wifi( void )
 
 static void connect_wifi( void )
 {
-    char *argv[] = { "wm_test", "join", XIAOMI_SSID, XIAOMI_AUTH, XIAOMI_PASSWORD, NULL };
+    printf( "----------------- Connecting to SSID ----------------------\n: %s\n", ssid );
+    char *argv[] = { "wm_test", "join", ssid, "wpa2_aes", password, NULL };
     int argc = 5;
 
     wm_test_main( argc, argv );
