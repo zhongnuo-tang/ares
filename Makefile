@@ -84,7 +84,8 @@ ifeq ($(CONFIG_LCD),y)
 	include $(LVGL_PATH)/lvgl.mk
 	CSRCS   += src/lcd_manager.c   \
 			 src/lcd_drawer.c   \
-			 src/assets/crabpower.c
+			 src/assets/crabpower.c \
+			 src/assets/realtek.c
 	CSRCS	+= $(LVGL_SRCS)
 endif
 
