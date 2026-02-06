@@ -26,6 +26,8 @@
 #define IMG_NAME crabpower
 #define RUNNING_STATE 0
 #define OTA_STATE 1
+#define PROGRESS_BAR_INIT 0
+#define PROGRESS_BAR_DESTROY -1
 
 /* ******************************************************************************* */
 /*                           Public Variable Declarations                          */
@@ -44,8 +46,8 @@ LV_IMG_DECLARE( IMG_NAME );
 static int lcd_fd = -1;
 static lv_display_t *disp;
 static lv_obj_t *price_label = NULL;
-static lv_anim_t* animation;
-
+static lv_anim_t *animation;
+static lv_obj_t *img = NULL;
 
 /* ******************************************************************************* */
 /*                           Private Function Declarations                         */
@@ -134,10 +136,9 @@ static void anim_size_cb( void *var, int32_t v )
     lv_obj_set_size( (lv_obj_t *)var, v, v );
 }
 
-static void lcd_draw( void )
+static void create_animation( void )
 {
-    // --- Animated Image ---
-    lv_obj_t *img = lv_img_create( lv_scr_act() );
+    img = lv_img_create( lv_scr_act() );
     lv_img_set_src( img, &IMG_NAME );
     lv_obj_align( img, LV_ALIGN_LEFT_MID, 10, 0 );
 
@@ -153,11 +154,12 @@ static void lcd_draw( void )
     lv_anim_set_playback_time( &a, 2000 );
     lv_anim_set_repeat_count( &a, LV_ANIM_REPEAT_INFINITE );
     animation = lv_anim_start( &a );
+}
 
-    // --- Static Stock Price Label ---
-    price_label = lv_label_create( lv_scr_act() );
-    lv_obj_align( price_label, LV_ALIGN_TOP_RIGHT, -10, 10 );
-    lv_obj_set_style_text_font( price_label, &lv_font_montserrat_14, 0 );
+static void destroy_animation( void )
+{
+    lv_obj_del( img );
+    lv_anim_delete( animation->var, animation->exec_cb );
 }
 
 static void resume_animation( void )
@@ -168,6 +170,38 @@ static void resume_animation( void )
 static void pause_animation( void )
 {
     lv_anim_pause( animation );
+}
+
+static void lcd_draw( void )
+{
+    // --- Animated Image ---
+    create_animation();
+
+    // --- Static Stock Price Label ---
+    price_label = lv_label_create( lv_screen_active() );
+    lv_obj_align( price_label, LV_ALIGN_TOP_RIGHT, -10, 10 );
+    lv_obj_set_style_text_font( price_label, &lv_font_montserrat_14, 0 );
+}
+
+void set_progress_bar( int32_t value )
+{
+    static lv_obj_t *bar1;
+    if ( value == PROGRESS_BAR_DESTROY )
+    {
+        lv_obj_del( bar1 );
+        bar1 = NULL;
+        return;
+    }
+    if ( value == PROGRESS_BAR_INIT )
+    {
+        bar1 = lv_bar_create( lv_screen_active() );
+        lv_obj_set_size( bar1, 200, 20 );
+        lv_obj_center( bar1 );
+    }
+    else
+    {
+        lv_bar_set_value( bar1, value, LV_ANIM_OFF );
+    }
 }
 
 /* ******************************************************************************* */
@@ -196,18 +230,19 @@ int task_draw_lcd( int argc, char *argv[] )
                 if ( current_state != OTA_STATE )
                 {
                     current_state = OTA_STATE;
-                    pause_animation();
+                    destroy_animation();
+                    set_progress_bar( PROGRESS_BAR_INIT );
                 }
+                set_progress_bar( i % 99 + 1 );
                 lv_label_set_text( price_label, "OTA In Progress" );
-                i++;
-                sleep( 3 );
             }
             else
             {
                 if ( current_state != RUNNING_STATE )
                 {
                     current_state = RUNNING_STATE;
-                    resume_animation();
+                    set_progress_bar( PROGRESS_BAR_DESTROY );
+                    create_animation();
                 }
                 char *time_str;
                 if ( mq_receive( time_status_mq, (char *)&time_str, sizeof( time_str ), NULL ) > 0 )

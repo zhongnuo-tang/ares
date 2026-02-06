@@ -78,13 +78,16 @@ CSRCS     += src/task_manager.c \
 			 src/system_monitor.c \
 			 src/netstress_manager.c \
 			 src/ota_manager.c \
-			 src/kernel_update.c
+			 src/kernel_update.c \
+			 src/ble_manager.c \
+			 src/ble_rmc.c
 
 ifeq ($(CONFIG_LCD),y)
 	include $(LVGL_PATH)/lvgl.mk
 	CSRCS   += src/lcd_manager.c   \
 			 src/lcd_drawer.c   \
-			 src/assets/crabpower.c
+			 src/assets/crabpower.c \
+			 src/assets/realtek.c
 	CSRCS	+= $(LVGL_SRCS)
 endif
 
